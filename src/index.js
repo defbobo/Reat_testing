@@ -1,16 +1,36 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import moment from 'moment';
-import { DatePicker, version } from 'antd';
-import 'antd/dist/antd.css';
+import React from "react";
+import ReactDOM from "react-dom";
+import moment from "moment";
+import { LocaleProvider, DatePicker, version, message } from "antd";
+import "antd/dist/antd.css";
+import zhCN from "antd/lib/locale-provider/zh_CN";
+import "moment/locale/zh-cn";
 
-ReactDOM.render(
-  <div style={{ margin: 24 }}>
-    <p style={{ marginBottom: 24 }}>
-      Current antd version: {version} <br/>
-      You can change antd version on the left panel (Dependencies section).
-    </p>
-    <DatePicker defaultValue={moment()} />   
-  </div>,
-  document.getElementById('root')
-);
+moment.locale("zh-cn");
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      date: ""
+    };
+  }
+  handleChange(date) {
+    message.info("您选择的日期是" + (date ? date.toString() : ""));
+    this.setState(date);
+  }
+  render() {
+    return (
+      <LocaleProvider locale={zhCN}>
+        <div style={{ width: 400, margin: "100px auto" }}>
+          <DatePicker onChange={value => this.handleChange(value)} />
+          <div style={{ marginTop: 20 }}>
+            当前日期：{this.state.date && this.state.date.toString()}
+          </div>
+        </div>
+      </LocaleProvider>
+    );
+  }
+}
+
+ReactDOM.render(<App />, document.getElementById("root"));
